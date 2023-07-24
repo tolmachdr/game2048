@@ -1,9 +1,4 @@
-//
-//  ViewController.swift
-//  game2048
-//
-//  Created by Rustem Orazbayev on 5/7/23.
-//
+
 import SwiftUI
 
 func generateRandomTile()->Bool {
@@ -11,7 +6,7 @@ func generateRandomTile()->Bool {
     var tileAdded = false
     while(!tileAdded){
         let randomRow = Int.random(in: 0..<4)
-        let randomColumn = Int.random(in: 0..<4)// todo: change length
+        let randomColumn = Int.random(in: 0..<4)
         if(Board.gameBoard[randomRow][randomColumn] == 0){
             Board.gameBoard[randomRow][randomColumn] = [2, 4].randomElement()!
             tileAdded = true
@@ -67,25 +62,21 @@ func moveDown() -> Int {
         var mergeOccurred = false
         var mergeValue = 0
 
-        // Start from the second-to-last row and move downwards
         for row in (0..<Board.gameBoard.count-1).reversed() {
             let currentTile = Board.gameBoard[row][column]
 
-            // Skip if the tile is empty
             if currentTile == 0 {
                 continue
             }
 
             var targetRow = row + 1
 
-            // Move the tile as far down as possible
             while targetRow < Board.gameBoard.count && Board.gameBoard[targetRow][column] == 0 {
                 Board.gameBoard[targetRow][column] = currentTile
                 Board.gameBoard[targetRow - 1][column] = 0
                 targetRow += 1
             }
-
-            // Check if merging is possible
+            
             if targetRow < Board.gameBoard.count && Board.gameBoard[targetRow][column] == currentTile && !mergeOccurred && mergeValue != currentTile {
                 value = mergeTilesDown(row: targetRow, column: column)
                 mergeOccurred = true
@@ -112,25 +103,21 @@ func moveLeft() -> Int {
         var mergeOccurred = false
         var mergeValue = 0
 
-        // Start from the second column and move to the left
         for column in 1..<Board.gameBoard[row].count {
             let currentTile = Board.gameBoard[row][column]
 
-            // Skip if the tile is empty
             if currentTile == 0 {
                 continue
             }
 
             var targetColumn = column - 1
 
-            // Move the tile as far left as possible
             while targetColumn >= 0 && Board.gameBoard[row][targetColumn] == 0 {
                 Board.gameBoard[row][targetColumn] = currentTile
                 Board.gameBoard[row][targetColumn + 1] = 0
                 targetColumn -= 1
             }
 
-            // Check if merging is possible
             if targetColumn >= 0 && Board.gameBoard[row][targetColumn] == currentTile && !mergeOccurred && mergeValue != currentTile {
                 value = mergeTilesLeft(row: row, column: targetColumn)
                 mergeOccurred = true
@@ -156,25 +143,21 @@ func moveRight() -> Int {
         var mergeOccurred = false
         var mergeValue = 0
 
-        // Start from the second-to-last column and move to the right
         for column in (0 ..< Board.gameBoard[row].count-1).reversed() {
             let currentTile =  Board.gameBoard[row][column]
 
-            // Skip if the tile is empty
             if currentTile == 0 {
                 continue
             }
 
             var targetColumn = column + 1
 
-            // Move the tile as far right as possible
             while targetColumn <  Board.gameBoard[row].count &&  Board.gameBoard[row][targetColumn] == 0 {
                 Board.gameBoard[row][targetColumn] = currentTile
                 Board.gameBoard[row][targetColumn - 1] = 0
                 targetColumn += 1
             }
 
-            // Check if merging is possible
             if targetColumn <  Board.gameBoard[row].count &&  Board.gameBoard[row][targetColumn] == currentTile && !mergeOccurred && mergeValue != currentTile {
                 value = mergeTilesRight(row: row, column: targetColumn)
                 mergeOccurred = true
@@ -199,20 +182,20 @@ func chooseColor(value: Int) -> Color {
     case 0:
         return Color.white
     case 2:
-        return Color(red: 204/255, green: 249/255, blue: 255/255)
+        return Color.orange
     case 4:
-        return Color(red: 124/255, green: 232/255, blue: 255/255)
+        return Color.pink
     case 8:
-        return Color(red: 85/255, green: 208/255, blue: 255/255)
+        return Color(.red)
     case 16:
-        return Color(red: 0/255, green: 172/255, blue: 223/255)
+        return Color(.purple)
     case 32:
-        return Color(red: 0/255, green: 128/255, blue: 191/255)
+        return Color(.blue)
     case 64:
-        return Color(red: 81/255, green: 122/255, blue: 181/255)
+        return Color(.cyan)
     case 128:
-        return Color(red: 51/255, green: 117/255, blue: 246/255)
+        return Color(.green)
     default:
-        return Color(red: 23/255, green: 90/255, blue: 255/255)
+        return Color(.gray)
     }
 }

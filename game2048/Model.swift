@@ -1,9 +1,3 @@
-//
-//  Model.swift
-//  game2048
-//
-//  Created by Rustem Orazbayev on 5/7/23.
-//
 
 import Foundation
 

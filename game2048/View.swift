@@ -1,9 +1,4 @@
-//
-//  View.swift
-//  game2048
-//
-//  Created by Rustem Orazbayev on 5/7/23.
-//
+
 
 import SwiftUI
 
@@ -11,8 +6,10 @@ import SwiftUI
 
 struct GridView: View {
     let gridSize = 4
-    let cellSize: CGFloat = 80.0
+    let cellSize: CGFloat = 70.0
     let cellSpacing: CGFloat = 10.0
+    let maxWidth: CGFloat = .infinity
+    let maxHeight: CGFloat = .infinity
     
     @State private var counter = 0
     @State var score: Int = 0
@@ -23,27 +20,74 @@ struct GridView: View {
     
     
     var body: some View {
+        
         VStack{
-            HStack{
-                Spacer()
-                Text("  High score:  \(highScore)  ")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.white)
-                    .font(.system(size: 24))
+            HStack {
+                Text("2048")
+                    .font(.system(size: 36, weight: .heavy, design: .rounded))
+                    .foregroundColor(.white)
+                    .frame(width: 120, height: 120)
+                    .background(Color.orange)
+                    .cornerRadius(4)
+                VStack(alignment: .center) {
+                    HStack {
+                        VStack{
+                            Spacer()
+                            Text("Score")
+                                .font(.system(size: 16, weight: .heavy, design: .rounded))
+                                .foregroundColor(.black)
+                            Text(score.description) // Use the observed score
+                                .font(.system(size: 24, weight: .heavy, design: .rounded))
+                                .foregroundColor(.black)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.yellow)
+                        .cornerRadius(4)
+
+                        VStack{
+                            Spacer()
+                            Text("Best")
+                                .font(.system(size: 16, weight: .heavy, design: .rounded))
+                                .foregroundColor(.black)
+                            Text(highScore.description) // Use the observed score
+                                .font(.system(size: 24, weight: .heavy, design: .rounded))
+                                .foregroundColor(.black)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.yellow)
+                        .cornerRadius(4)
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    Button(action: {
+                        score = 0
+                        for i in 0..<4 {
+                            for j in 0..<4 {
+                                Board.gameBoard[i][j] = 0
+                            }
+                        }
+                        _ = generateRandomTile()
+                        _ = generateRandomTile()
+                        counter += 1
+                    }) {
+                        Text("New Game")
+                            .font(.system(size: 24, weight: .heavy, design: .rounded))
+                            .foregroundColor(.black)
+                            .frame(maxWidth: maxWidth, maxHeight: maxHeight)
+                            .background(Color.red)
+                            .cornerRadius(4)
+                    }
+
+
+                }
+                .frame(height: 120)
             }
-            .padding(10)
-            .background(Color.blue)
+            .frame(width: 338)
             
-            
-            HStack{
-                Spacer()
-                Text("Current score: \(score)")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color.white)
-                    .font(.system(size: 24))
-            }
-            .padding(10)
-            .background(Color.blue)
             
             Spacer()
             
@@ -57,7 +101,7 @@ struct GridView: View {
                                 .fill(chooseColor(value: Board.gameBoard[row][column]))
                                 .frame(width: cellSize, height: cellSize)
                                 .overlay(
-                                    Text(String(Board.gameBoard[row][column]+counter-counter)).font(.system(size: 28))
+                                    Text(String(Board.gameBoard[row][column]+counter-counter)).font(.system(size: 28)).foregroundColor(.white)
                                 )
                         }
                     }
@@ -66,7 +110,7 @@ struct GridView: View {
                 
             }
             .padding(cellSpacing)
-            .background(Color.cyan)
+            .background(Color.yellow)
             .gesture(
                 DragGesture(minimumDistance: 50)
                     .onEnded {
@@ -116,17 +160,6 @@ struct GridView: View {
             Spacer()
             
             
-            Button("New Game") {
-                score = 0
-                for i in 0..<4 {
-                    for j in 0..<4 {
-                        Board.gameBoard[i][j] = 0
-                    }
-                }
-                _ = generateRandomTile()
-                _ = generateRandomTile()
-                counter+=1
-            }
         }
     }
 }
